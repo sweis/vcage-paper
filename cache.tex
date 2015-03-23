@@ -1,0 +1,294 @@
+\section{Cache Management}
+
+Compared to a conventional system, \vcage\ treats the processor cache
+like main memory, and main memory like an encrypted backing store.
+All cleartext data must remain resident in the processor cache for
+correctness; evictions could leak sensitive data to untrusted main
+memory.  Since cache space is smaller than traditional main memory
+sizes by orders of magnitude, it must be managed efficiently.
+
+Fortunately, cache sizes are growing rapidly along with advances in
+process technology.  Modern multi-core processors integrate a large,
+physically-indexed last-level cache (LLC) shared among multiple cores.
+Currently, the Intel Ivy Bridge EX x86 processor is available with a
+37.5MB on-die LLC.  Unfortunately, x86 processors lack hardware
+support for explicit software control over cache allocation and
+eviction policies.  Moreover, recent x86 hardware introduced complex
+cache indexing, which makes software cache management even more
+difficult.
+
+After reviewing processor caching behavior, including memory types and
+cache indexing, we explain how \vcage\ manages cache contents despite
+numerous challenges.
+
+\subsection{Memory Types}
+
+Processors commonly provide some method for specifying how regions of
+physical memory should be cached.  The x86 architecture
+\cite{Intel-SDM} supports a small set of memory type range registers
+(MTRRs), each of which can be programmed to control the caching method
+used for a contiguous region of memory, subject to various size and
+alignment constraints.  A similar capability is provided for
+specifying caching attributes of individal pages via page tables
+entries and the x86 page attribute table (PAT).
+
+\vcage\ uses MTRRs to prevent nearly all of untrusted main memory from
+being cached, setting the memory type to {\em write-combining (WC)},
+instead of {\em uncacheable (UC)}. Neither memory type is cached, but
+WC offers significantly higher performance than UC, due to load and
+store buffering.  However, write combining uses a weak memory ordering
+model which is not appropriate for general-purpose data; in most
+systems, it is used only for video frame buffers.  \vcage\ accesses WC
+memory in a controlled manner for encrypted paging.  Data is copied
+between the cache and memory using non-temporal move instructions
+that utilize write-combining store buffers and streaming load buffers
+efficiently \cite{Intel-SDM}.
+
+\subsection{Traditional Cache Indexing}
+
+Memory is cached in units of {\em lines}; on modern x86 hardware, the
+cache line granularity is 64 bytes, with 64-byte alignment.  The
+processor maps each line of memory to a single $n$-way associative
+{\em cache set} based on its physical address.  For example, on the
+Intel Sandy Bridge x86 processor, a single last-level cache set
+consists of 20 lines; {\em i.e.}, the cache is 20-way set associative.
+
+Main memory is normally several orders of magnitude larger than the
+cache, so many more than $n$ lines of physical memory map to the
+same cache set.  When a new line of memory needs to be cached in a set
+that is already full, these {\em conflicting} lines contend for the
+same scarce cache space.  The processor implements a cache replacement
+policy that chooses some existing line to replace, typically evicting
+one of the least recently used (LRU) lines from the set to optimize
+for temporal locality.
+
+Traditionally, processors have employed a simple mapping of physical
+addresses to cache sets, based on lower-order bits of the physical
+address.  For example, consider an Intel Nehalem x86 processor with an
+8MB 16-way set-associative cache.  Each cache set contains 16 lines
+$\times$ 64B = 1KB of cached data; the entire cache contains 8K sets,
+requiring a 13-bit index.  A physical address is mapped to a cache set
+using bits 6..18 as the cache set index, with bits 0..5 specifying the
+intra-line byte offset.
+
+\subsection{Page Coloring}
+
+When paging is used for address translation, the low-order bits of the
+physical page number are the high-order bits of the cache set index.
+This straightforward hardware mapping of physical addresses to cache
+sets has been leveraged for many years by operating systems and
+hypervisors, using a technique known as {\em page coloring}.  By
+controlling the virtual-to-physical page mapping, system software can
+partition pages into disjoint sets, or {\em colors}, such that pages
+with different colors do not conflict in the cache.
+
+In the Nehalem example above, there are 128 page colors when using
+conventional 4KB x86 ``small'' pages. Bits 0..6 of the physical page
+number, corresponding to physical address bits 12..18, specify the
+page color -- a contiguous range of sets used to cache the page
+contents.
+
+Page coloring has been used in many systems to improve performance by
+reducing cache conflict misses \cite{Bugnion-PageColoring}, and to
+control the isolation or sharing of cache memory between software
+contexts \cite{Zhang-PageColoring}.  Commercial hypervisors have
+preserved the relative page coloring used by the guest OS within a
+virtual machine \cite{Waldspurger-ESX}.  We had originally intended to
+leverage page coloring to enable \vcage\ to manage the processor
+cache.  However, as detailed below, recent changes in processor cache
+indexing have complicated this approach.
+
+\subsection{Complex Cache Indexing}
+
+Recent Intel x86 processors, starting with the Sandy Bridge
+micro-architecture, use a ring-based interconnect between cores and a
+multi-banked last level cache (LLC), which is organized into multiple
+cache {\em slices}.  Physical addresses are mapped to LLC cache sets
+within slices using ``complex cache indexing''
+\cite{Intel-Uncore-E5-2600,Intel-SDM}.  The hardware that realizes
+this mapping implements an undocumented, proprietary hash function,
+and may potentially use any physical address bits as inputs.  The hash
+function may also vary across different processor implementations and
+configurations.
+
+As a result, traditional page-coloring techniques may no longer work.
+A small contiguous memory region can be scattered across many
+discontiguous sets throughout the cache.  Since \vcage\ requires
+strict control over the cache, we developed a reliable approach for
+generating fine-grained address-to-cache-set mappings on modern
+Intel processors.
+
+\subsection{Discovering Set Mappings}
+
+We present a programmatic method for computing complete information
+about processor-specific mappings from physical addresses to cache
+sets. Although we use Intel x86 processors, the same general technique
+should work on any architecture with deterministic cache indexing
+and accurate cache performance counters.
+
+As input, the method takes a collection of physical addresses at
+cache-line granularity, typically a single contiguous address range.
+As output, these addresses are partitioned into cache
+{\em conflict sets}, such that addresses within a partition conflict
+in the cache, and addresses in different partitions do not conflict.
+The basic idea is to exceed the limited associativity of a
+single $n$-way associative cache set to force observable cache
+evictions and discover conflicts.
+
+An empty conflict set $S$ is allocated, and used to maintain an array
+of addresses observed to conflict in the LLC.
+The entire cache is flushed using the the x86 {\tt WBINVD} instruction
+to start from a known empty state.
+
+Loads are issued to each input memory address, one-by-one, until a
+hardware performance counter, programmed to monitor LLC evictions, and
+checked after each load, detects that a first eviction has occurred.
+On the Intel Sandy Bridge and Ivy Bridge processors, the uncore
+caching-agent (CBo) performance counters were programmed to monitor
+the {\tt LLC\_VICTIMS} event, filtered by the MES cache states
+\cite{Intel-Uncore-E5-2600}.  Since lines in different slices cannot
+conflict, and the hardware provides per-slice counters, this procedure
+is run for each slice independently.  Conveniently, this also
+eliminates any potential interference from concurrent cache activity
+in other slices.
+
+The address which caused the eviction is added to $S$.  The cache is
+again flushed, and loads are performed to all addresses in $S$,
+to ensure that they are resident in the cache.  As a result, a
+different conflicting input address associated with the same set will
+cause the next eviction -- essentially rotating through a ring of
+conflicting lines that exceed the hardware cache associativity.  Loads
+are issued again to the remaining set of potentially-conflicting input
+addresses, one-by-one, in the same order, and the address causing the
+next eviction is added to $S$.
+
+This process is repeated until $|S| > n$, or several repetitions yield
+addresses already in $S$.  Each generated partition will contain $n+1$
+physical lines for an $n$-way set-associative cache.  To support
+larger input regions, once a conflict set $S$ contains $n+1$
+addresses, one is selected, moved to an ``overflow'' list associated
+with $S$, and removed as an active input address.  This process can be
+repeated until all input memory addresses have been partitioned into
+conflict sets.
+
+After each conflict set is identified, each of its its constituent
+addresses is marked as already ``used'' by some set.  When input
+addresses are read one-by-one in the method outlined above, any which
+have already been marked as used are instead flushed from the cache
+using the x86 {\tt CLFLUSH} instruction.  This prevents noise due to
+prefetching or eviction events from other sets.
+
+Additional steps can further improve the robustness and accuracy of
+this approach, including mapping the primary data structures as
+uncached, disabling interrupts during the computation of each
+conflict set, disabling prefetching, and booting in uniprocessor mode
+to prevent memory accesses from other cores sharing the LLC.  More
+generally, multiple runs can be performed to resolve any discrepancies
+and ensure consistent results.
+
+\subsection{Experimental Results}
+
+We implemented our set-mapping method as a loadable kernel module for
+Linux.  There were few differences in the partitions computed by
+separate runs; we observed a single-line difference in less than 0.2\%
+of the partitions computed for a cache-sized region, even without
+using all of the noise-reduction techniques described above.  The
+results revealed many interesting facts about the caching behavior of
+the Intel Sandy Bridge and Ivy Bridge processors that can be leveraged
+to perform page-level partitioning.
+
+% XXX say something about time to run,
+% XXX  significant optimization after finding low 17 bits all zero
+
+A Sandy Bridge processor configured with a 20MB LLC contains 320K
+64-byte cache lines, grouped into 16K 20-way-associative cache sets.
+Cache sets are partitioned across 8 cache slices, each containing 2K
+sets; an intra-slice cache set index can be represented in 11 bits.
+The conflict-set data revealed that the 17 low-order physical address
+bits are identical within a single set.  These bits encode an 11-bit
+intra-slice index, plus a 6-bit intra-line byte offset.  At 4KB page
+granularity, there are 32 cache partitions, each with size 640KB,
+based on address bits 12..16, {\em i.e.}, the lower-order page-number
+bits.  This information yields a simple mechanism for performing
+coarse cache partitioning that is effectively the same as traditional
+cache coloring.
+
+While the intra-slice cache index can be extracted directly from a
+physical address, each slice has a cache set at the same index.  Two
+pages won't conflict in the cache if their constituent lines are
+mapped to different slices.  The conflict-set data also revealed
+patterns in the hardware address-to-slice mapping.  The data indicated
+that the 64 consecutive lines within a page are striped across
+different slices in one of eight regular patterns.  This information
+yields a second partitioning method that is distinct from traditional
+page coloring, based on classifying each page into one of these eight
+patterns.  Pages with different slice patterns do not conflict in the
+cache, but the slice number isn't coded as a simple bit range in the
+physical address.
+
+Using both methods of cache partitioning derived from the conflict-set
+data, it is possible to construct ``2D'' nested partitions -- one
+using address ranges, where address bits 12..16 encode the ``page
+color'', and the other using the page's slice-pattern classification.
+The slice classification can be stored compactly in 3 bits per 4K page
+using a simple lookup table.  With additional analysis, it should be
+possible to determine the exact address-to-slice hash function, either
+manually, or by using machine-learning techniques.  Experimentally, we
+determined that the two partitioning methods are orthogonal, so each
+640KB page-color partition can be sub-partitioned into 8 slice
+patterns, yielding a smaller, more flexible 80KB partitioning
+granularity.  This is as fine-grained as possible given the hardware
+-- 4KB pages times 20-way set associativity.
+
+We also found that some cache sets in slices 0 and 1 appeared to have
+an effective associativity of only 19 ways, instead of the expected
+20.  We believe this is due to hardware way-partitioning
+\cite{Iyer-CQOS}, allowing the integrated graphics controller to claim
+a dedicated portion of the LLC.
+
+\subsection{Other Approaches}
+
+The x86 architecture provides additional cache operating modes that
+initially seemed promising for \vcage\ cache management.  A
+well-documented {\em no-fill cache mode} can be specified by setting
+{\tt CR0.CD} \cite{Intel-SDM}.  In this mode, read hits access the
+cache, but read misses are prevented from updating the cache.  Write
+hits update the cache, but only write misses and writes to shared
+lines update system memory. Invalidations are also
+allowed. Unfortunately, this mode applies not only to the LLC, but to
+{\em all} levels of the cache hierarchy, including L1 and L2.  As a
+result, overall performance is unacceptable, as the contents of the
+fastest caches remain frozen, and cannot be updated to reflect changes
+in the hot working set.
+
+A separate {\em no-evict cache mode}, typically available only to BIOS
+writers under NDA for system initialization, prevents cache evictions.
+Unfortunately, this mode has so many onerous restrictions (such as
+lacking support for paging), that it is unsuitable for general-purpose
+execution.
+
+\begin{itemize}
+    \item CARMA
+    \item Non-Intel architectures: ARM and AMD?
+\end{itemize}
+
+\subsection{Detecting Cache Leaks}
+
+Careful cache management, leveraging both the memory types and
+partitioning information discussed above, should be sufficient to
+ensure that all cleartext data remains resident in the cache.
+Nevertheless, \vcage\ programs the uncore caching-agent (CBo) hardware
+performance counters \cite{Intel-Uncore-E5-2600} to monitor cache
+evictions and lookup misses continuously, while the system is
+executing.
+
+During \vcage\ development, we detected and fixed several potential
+cache leaks, mostly related to I/O and execution of
+system-management-mode (SMM) code.
+
+\begin{itemize}
+    \item SMM, SMM Transfer monitor
+    \item Intel DDIO
+    \item Video card, using external card
+    \item Remediation for detected leaks?
+\end{itemize}

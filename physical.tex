@@ -1,0 +1,100 @@
+\section{Physical Attacks}
+\label{sec:physical}
+
+It is generally understood that physical access to an x86 platform can
+completely compromise software security. Historically, physical
+security controls, such as cages, cameras, and locks, have been employed to
+prevent or detect physical access. Yet with adoption of
+outsourced infrastructure and cloud computing, x86 platforms are
+increasingly run outside the physical control of the software owner.
+
+This section briefly summarizes several well-known physical attack vectors
+against x86 platforms, including DMA, physical memory extraction, and
+platform malware.
+
+\subsection{Direct Memory Access}
+
+By design, x86 architectures provide direct memory access (DMA) from
+hardware subsystems to access main memory independently of the
+CPU. DMA access is generally used for performance, for example
+allowing disk, network, and graphics devices to read and write
+data directly to memory without incurring CPU cycles.
+
+Yet, without proper controls, devices with DMA access can read
+arbitrary regions of memory and compromise system security by exposing
+secrets or allowing an attacker to modify running software in
+place. Secrets from captured memory can be extracted easily with
+forensics tools like Volatility \cite{Volatility:2014}.
+
+Tribble \cite{Carrier:2004hardware, Grand:2007patent} is an
+early example of a device desiged for exfiltrating data via DMA
+access, based on an off-the-shelf Intel development kit. Copilot
+\cite{Petroni:2004copilot} also used DMA with a PCI device for the
+purpose of monitoring kernel integrity. The Maux attack
+\cite{Triulzi:2008vd} exploited remote vulnerabilities in a standard
+network interface device and accessed memory via DMA. Off-the-shelf
+intelligent network adapters, such as those made by Cavium, are able
+to exfiltrate DMA-accessed memory over a network connection
+\cite{Horovitz:2013physical}.
+
+The IEEE 1394 Firewire interface also provides DMA by design. This led
+to several demonstrations of memory extraction to steal data or for
+forensics \cite{Dornseif:20040wned, Boileau:2006we,
+  Witherden:2010forensics, Dornseif:2005firewire}. The Thunderbolt
+interface also offers DMA access and can be exploited in a similar
+manner \cite{Maartmann:2011inception}.
+
+\subsection{Physical Memory Extraction}
+
+While DMA may be mitigated by software-based countermeasures,
+leveraging a hardware IOMMU such as
+Intel VT-d \cite{Intel-IOMMU:2013}, other attacks involve the physical
+extraction or modification of system memory. For example, memory bus
+analyzer devices are available and can interdict memory
+traffic. However, bus analyzers must be installed ahead of time, tend
+to be relatively expensive, and physically large.
+
+A ``cold boot'' is a low-cost memory extraction attack that can be
+conducted for little cost on a running system
+\cite{Halderman:2008tp}. Cold booting involves literally freezing
+system memory modules with an aerosol freeze spray. The memory
+contents are preserved long enough to boot to a ``scraper'' image such
+as {\em bios-memimage} or {\em msramdump} which can preserve the
+memory contents to persistent storage.
+
+Cold booting disrupts a running system and data must be recovered
+immediately, before the memory module thaws. Furthermore, it does not
+reliably capture all memory contents, as there is some degradation
+over time. Conducting the attack may be further complicated by
+error-correcting memory which is cleared on a reset or by data
+scrambling for power supply noise suppression \cite{Mozak:2011lfsr}.
+
+Non-volatile memory (NV-RAM), designed to persist data after a power
+loss, is now available in DDR3/DDR4 form-factors used by standard x86
+servers. An attacker can install NV-RAM modules in a server and remove
+them at any moment, recovering the data at a later time. If a memory
+mirroring mode is configured, an attacker could remove a NV-RAM module
+from a running system and replace it without disrupting service.
+
+
+\subsection{Bootkits and Platform Malware}
+
+\begin{itemize}
+  \item APT
+\end{itemize}
+
+\subsection{Practical Attack Vectors}
+
+{\em SW: This might be unnecessary. Do we really need to explain how people get
+physical access? }
+
+{\em CW: Suggest writing a few sentences, and moving to intro for this
+section.  The NSA attacks seem particularly interesting to at least mention.}
+
+\begin{itemize}
+  \item Supply chain
+  \item Datacenter insiders
+  \item Previous bare-metal host tenants: Can we pwn our SoftLayer BIOS?
+  \item Stoned bootkit in the wild
+  \item NSA ANT
+\end{itemize}

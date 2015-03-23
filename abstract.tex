@@ -1,0 +1,22 @@
+\label{sec:abstract}
+
+Defending computers from unauthorized physical access and malicious
+hardware devices has proved extremely challenging.  The problem is
+exacerbated in cloud-computing environments, where users lack physical
+control over the server hardware that executes their workloads.
+Moreover, cloud service providers can be compelled by government
+agencies to provide physical access to servers.
+
+We introduce {\em \vcage}, a software-based cryptoprocessor system
+that employs cryptographic techniques to provide confidentiality for
+unmodified workloads. Code and data are stored as cleartext only
+within the processor cache, but remain encrypted in main memory.  We
+implemented \vcage\ in a commercial product for commodity server
+platforms based on Intel x86 processors and industry-standard TPMs.
+
+We present the design and implementation of \vcage\ in Linux, and show
+how it virtualizes physical security by protecting data-in-use
+transparently for KVM virtual machines.  Quantitative experiments
+demonstrate that \vcage\ effectively safeguards privacy, while
+achieving acceptable performance for a wide range of workloads.
+

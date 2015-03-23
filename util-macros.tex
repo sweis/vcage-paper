@@ -1,0 +1,23 @@
+% Some useful macros.
+
+% time macros
+\newcount\hour
+\newcount\minute
+\hour=\time
+\divide \hour by 60
+\minute=\time
+\loop \ifnum \minute > 59 \advance \minute by -60 \repeat
+\def\now{%
+\ifnum \hour<13
+\ifnum \hour<1 12:\else\number\hour:\fi
+\ifnum \minute<10 0\fi
+\number\minute%
+\ifnum \hour<12 \ am \else \ pm \fi
+\else \advance \hour by -12 \number\hour:%
+\ifnum \minute<10 0\fi
+\number\minute%
+\ pm \fi%
+}
+
+% project name (use macro to facilitate renaming)
+\newcommand{\vcage}{vCage}

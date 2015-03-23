@@ -1,0 +1,39 @@
+\section{Evaluation}
+\label{sec:evaluation}
+
+\begin{itemize}
+  \item Real-world use cases
+    \begin{itemize}
+      \item commercial product
+      \item whole-VM protection
+      \item availability of compatible systems on cloud providers
+    \end{itemize}
+  \item More implementation details
+  \item Quantitative experiments
+\end{itemize}
+
+\subsection{Confidentiality}
+
+\begin{itemize}
+  \item Discussion of correctness
+  \item Eviction counts for various benchmarks
+\end{itemize}
+
+\subsection{Performance}
+
+\begin{itemize}
+  \item Discuss modifications to Linux kernel / running VMs on KVM
+    \begin{itemize}
+      \item Flunky threads
+      \item Laptop mode
+      \item scan batch sizes
+    \end{itemize}
+
+  \item Benchmarks
+    \begin{itemize}
+      \item Raw memory throughput: 30mb with and w/o privatecore
+      \item Crypto benchmark: 30mb with and w/o privatecore
+      \item Webserver benchmark: 30mb with and w/o privatecore
+      \item Database benchmark: 30mb with and w/o privatecore
+    \end{itemize}
+\end{itemize}
