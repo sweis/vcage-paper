@@ -41,6 +41,17 @@ year = {2005}
  year                 = {2011},
 }
 
+http://www.chromium.org/chromium-os/chromiumos-design-docs/verified-boot
+
+@misc{flashrom,
+author = {Hermann, Uwe and Hailfinger, Carl-Daniel},
+organization = {{Flashrom}},
+title = {{FLashrom}},
+howpublished = {{http://flashrom.org/Flashrom}},
+year = {2012}
+}
+
+
 @misc{Volatility:2014,
  organization = {Volatile Systems},
  author = {Aaron Walters},
@@ -111,10 +122,11 @@ year = {2012},
 pages = {141--154}
 }
 
-@article{Zaddach:2013we,
+@inproceedings{Zaddach:2013we,
 author = {Zaddach, Jonas and Kurmus, Anil and Balzarotti, Davide and Blass, Erik-Oliver and Francillon, Aur{\'e}lien and Goodspeed, Travis and Gupta, Moitrayee and Koltsidas, Ioannis},
 title = {{Implementation and implications of a stealth hard-drive backdoor}},
 year = {2013},
+booktitle={Computer Security Applications Conference},
 pages = {279--288}
 }
 
@@ -178,12 +190,11 @@ journal = {4th European Trusted Infrastructure Summerschool, ETISS},
 year = {2009}
 }
 
-@article{Delugre:2011vv,
+@techreport{Delugre:2011vv,
 author = {Delugr{\'e}, Guillaume},
 title = {{How to develop a rootkit for Broadcom NetExtreme network cards}},
 year = {2011},
-pages = {1--48},
-month = jul
+institution={Sogeti ESEC Lab}
 }
 
 @article{Breuk:2012ty,
@@ -191,6 +202,13 @@ author = {Breuk, Rory and Spruyt, Albert},
 title = {{Integrating DMA attacks in exploitation frameworks}},
 journal = {Faculty of Science, University of Amsterdam: http://staff. science. uva. nl/~ delaat/rp/2011-2012/p14/report. pdf},
 year = {2012}
+}
+
+@misc{Horovitz:2013,
+title = {{Software Cryptoprocessor}},
+author = {Horovitz, Oded and Weis, Stephen A and Waldspurger, Carl A and Rihan, Sahil},
+howpublished = {US Patent App. 13/614,935},
+year = {2013}
 }
 
 @article{Forristal:2011te,
@@ -201,11 +219,11 @@ pages = {1--22},
 month = nov
 }
 
-@article{Anonymous:2005ww,
-title = {{Analyzing trusted platform communication}},
-year = {2005},
-pages = {1--8},
-month = jul
+@inproceedings{Kursawe:2005,
+  title={{Analyzing Trusted Platform Communication}},
+  author={Kursawe, Klaus and Schellekens, Dries and Preneel, Bart},
+  booktitle={CRASH--CRyptographic Advances in Secure Hardware},
+  year={2005}
 }
 
 @article{Rosenberg:2012wl,
@@ -217,7 +235,7 @@ year = {2012}
 @inproceedings{Stewin:2011eu,
 author = {Stewin, Patrick and Seifert, Jean-Pierre and Mulliner, Collin},
 title = {{Poster: Towards detecting DMA malware}},
-booktitle = {CCS '11: Proceedings of the 18th ACM conference on Computer and communications security},
+journal = {{ACM Computer and Communications Security}},
 year = {2011},
 publisher = { ACM},
 month = oct
@@ -275,11 +293,13 @@ number = {5},
 pages = {1--16}
 }
 
-@article{Duflot:2011tk,
-author = {Duflot, Lo{\"\i}c and Perez, Yves-Alexis and Morin, Benjamin},
-title = {{What if you can't trust your network card?}},
-year = {2011},
-pages = {378--397}
+@inproceedings{Duflot:2011tk,
+  title={{What if you can’t trust your network card?}},
+  author={Duflot, Lo{\"\i}c and Perez, Yves-Alexis and Morin, Benjamin},
+  booktitle={Recent Advances in Intrusion Detection},
+  pages={378--397},
+  year={2011},
+  organization={Springer}
 }
 
 @article{Simmons:2011th,
@@ -325,9 +345,10 @@ year = {2005},
 pages = {6 pp.--94}
 }
 
-@article{Enck:2008wl,
+@techreport{Enck:2008wl,
 author = {Enck, W. and Butler, K. and Richardson, T. and McDaniel, P.},
 title = {{Securing Non-Volatile Main Memory}},
+institution = {Pennsylvania State University},
 year = {2008}
 }
 
@@ -381,11 +402,14 @@ publisher = { ACM  Request Permissions},
 month = dec
 }
 
-@article{Chhabra:2011wu,
+
+@inproceedings{Chhabra:2011wu,
 author = {Chhabra, Siddhartha and Solihin, D},
 title = {{i-NVMM: a secure non-volatile main memory system with incremental encryption}},
-year = {2011},
-pages = {177--188}
+booktitle={International Symposium on Computer Architecture (ISCA)},
+pages={177--188},
+year={2011},
+organization={IEEE}
 }
 
 @article{Owusu:2013ti,
@@ -440,7 +464,7 @@ month = jun
 @article{Triulzi:2010wh,
 author = {Triulzi, A.},
 title = {{The Jedi Packet Trick takes over the Deathstar (or:``Taking NIC Backdoors to the Next Level''),''}},
-journal = {CanSecWest/core10},
+journal = {CanSecWest},
 year = {2010},
 pages = {24--26}
 }
@@ -479,21 +503,14 @@ publisher = { Springer-Verlag},
 month = nov
 }
 
-@article{Perrig:2011ub,
-author = {Perrig, Adrian},
-title = {{Software behavior based trusted attestation}},
-year = {2011},
-volume = {3},
-pages = {298--301}
-}
-
-@article{McKeen:2013wg,
-author = {McKeen, Frank and Alexandrovich, Ilya and Berenzon, Alex and Rozas, Carlos V and Shafi, Hisham and Shanbhogue, Vedvyas and Savagaonkar, Uday R},
-title = {{Innovative instructions and software model for isolated execution}},
-journal = {HASP},
-year = {2013},
-volume = {13},
-pages = {10}
+@inproceedings{Peiqiang:2011,
+  title={Software behavior based trusted attestation},
+  author={Peiqiang, Chen and B{\o}egh, J{\o}rgen and Yuyu, Yuan},
+  booktitle={Measuring Technology and Mechatronics Automation (ICMTMA)},
+  volume={3},
+  pages={298--301},
+  year={2011},
+  organization={IEEE}
 }
 
 @article{Parno:2007tq,
@@ -572,13 +589,6 @@ author = {Weinstein, David},
 title = {{A Security Hygienic Smart Charger for Mobile Devices}},
 journal = {The MITRE Corp., Mclean, VA},
 year = {2012}
-}
-
-@article{Hoekstra:2013uh,
-author = {Hoekstra, Matthew and Lal, Reshma and Pappachan, Pradeep and Phegade, Vinay and Del Cuvillo, Juan},
-title = {{Using innovative instructions to create trustworthy software solutions}},
-year = {2013},
-volume = {13}
 }
 
 @article{RodriguezEstivill:2009tk,
@@ -725,17 +735,34 @@ year = {2002},
 volume = {536}
 }
 
-@article{Anati:2013tc,
-author = {Anati, Ittai and Gueron, Shay and Johnson, Simon P and Scarlata, Vincent R},
-title = {{Innovative technology for cpu based attestation and sealing}},
+@inproceedings{McKeen:2013wg,
+author = {McKeen, Frank and Alexandrovich, Ilya and Berenzon, Alex and Rozas, Carlos V and Shafi, Hisham and Shanbhogue, Vedvyas and Savagaonkar, Uday R},
+title = {{Innovative instructions and software model for isolated execution}},
+booktitle = {Proceedings of the 2nd International Workshop on Hardware and Architectural Support for Security and Privacy, HASP},
 year = {2013},
-volume = {13}
+month = jun
 }
 
-@article{Futral:2013vb,
+@inproceedings{Anati:2013tc,
+author = {Anati, Ittai and Gueron, Shay and Johnson, Simon P and Scarlata, Vincent R},
+title = {{Innovative Technology for CPU Based Attestation and Sealing}},
+booktitle = {Proceedings of the 2nd International Workshop on Hardware and Architectural Support for Security and Privacy, HASP},
+year = {2013},
+month = jun
+}
+
+@inproceedings{Hoekstra:2013uh,
+author = {Hoekstra, Matthew and Lal, Reshma and Pappachan, Pradeep and Phegade, Vinay and Del Cuvillo, Juan},
+title = {{Using innovative instructions to create trustworthy software solutions}},
+booktitle = {Proceedings of the 2nd International Workshop on Hardware and Architectural Support for Security and Privacy, HASP},
+year = {2013},
+month = jun
+}
+
+@book{Futral:2013vb,
 author = {Futral, William and Greene, James},
 title = {{Intel Trusted Execution Technology for Server Platforms: A Guide to More Secure Datacenters, 1st edition}},
-journal = {Intel Trusted Execution Technology for Server Platforms: A Guide to More Secure Datacenters, 1st edition},
+publisher = {ApressOpen},
 year = {2013},
 month = sep
 }
@@ -851,6 +878,8 @@ number = {1},
 pages = {37--71}
 }
 
+
+
 @article{Harrison:2007ta,
 author = {Harrison, Keith and Xu, Shouhuai},
 title = {{Protecting cryptographic keys from memory disclosure attacks}},
@@ -896,6 +925,13 @@ booktitle = {SS'08: Proceedings of the 17th conference on Security symposium},
 year = {2008},
 publisher = { USENIX Association},
 month = jul
+}
+
+@inproceedings{Pabel:2010vq,
+author = {Pabel, J{\"u}rgen},
+title = {{FrozenCache Mitigating cold-boot attacks for Full-Disk-Encryption software}},
+booktitle = {27th Chaos Communication Congress},
+year = {2010}
 }
 
 @article{Elbaz:2006tb,
@@ -944,7 +980,7 @@ month = jun
 @article{Azab:2010vc,
 author = {Azab, A.M. and Ning, P. and Wang, Z. and Jiang, X. and Zhang, X. and Skalsky, N.C.},
 title = {{HyperSentry: enabling stealthy in-context measurement of hypervisor integrity}},
-journal = {Proceedings of the 17th ACM conference on Computer and communications security},
+journal = {{ACM Computer and Communications Security}},
 year = {2010},
 pages = {38--49}
 }
@@ -1026,7 +1062,7 @@ month = sep
 @article{Chan:2008tx,
 author = {Chan, E.M. and Carlyle, J.C. and David, F.M. and Farivar, R. and Campbell, R.H.},
 title = {{BootJacker: Compromising computers using forced restarts}},
-journal = {Proceedings of the 15th ACM conference on Computer and communications security},
+journal = {{ACM Computer and Communications Security}},
 year = {2008},
 pages = {555--564}
 }
@@ -1037,9 +1073,10 @@ title = {{Architectural Support for Hypervisor-Secure Virtualization}},
 year = {2012}
 }
 
-@article{Vasudevan:2012vs,
+@inproceedings{Vasudevan:2012vs,
 author = {Vasudevan, Amit and McCune, Jonathan and Newsome, James and Perrig, Adrian},
 title = {{CARMA: A Hardware Tamper-Resistant Isolated Execution Environment on Commodity x86 Platforms}},
+booktitle = {{AsiaCCS}},
 year = {2012}
 }
 
@@ -1060,10 +1097,17 @@ pages = {1154--1159}
 }
 
 @article{Wojtczuk:2009vb,
-author = {Wojtczuk, R. and Rutkowska, J.},
-title = {{Attacking intel trusted execution technology}},
+author = {Wojtczuk, Rafal and Rutkowska, Joanna},
+title = {{Attacking Intel Trusted Execution Technology}},
 journal = {Black Hat DC},
 year = {2009}
+}
+
+@techreport{Wojtczuk:2011wd,
+author = {Wojtczuk, R. and Rutkowska, J.},
+title = {{Attacking Intel TXT via SINIT code execution hijacking.}},
+year = {2011},
+institution = {Invisible Things Labs}
 }
 
 @article{Triulzi:2008vd,
@@ -1076,7 +1120,7 @@ year = {2008}
 @article{Szefer:2011tn,
 author = {Szefer, J. and Keller, E and Lee, R B and Rexford, J},
 title = {{Eliminating the hypervisor attack surface for a more secure cloud}},
-journal = {Proceedings of the 18th ACM conference on Computer and communications security},
+journal = {{ACM Computer and Communications Security}},
 year = {2011},
 pages = {401--412}
 }
@@ -1235,6 +1279,15 @@ year = {2005}
  address = {New York, NY, USA},
 }
 
+@manual{Intel-SGX:2013,
+  organization = {Intel Corporation},
+  keywords = {Architectures Manual},
+  title = {Software Guard Extensions Programming Reference},
+  month = {September},
+  year = 2013,
+  note = {Order number 329298-001{US}}
+}
+
 @manual{Intel-SDM,
   organization = {Intel Corporation},
   keywords = {Architectures Manual},
@@ -1244,32 +1297,6 @@ year = {2005}
   note = {Order number 325462-047{US}}
 }
 
-@manual{Intel-Uncore-E5-2600,
-  organization = {Intel Corporation},
-  title = {Intel Xeon Processor E5-2600 Product Family Uncore Performance Monitoring Guide},
-  month = {March},
-  year = 2012,
-  note = {Order number 327043-001}
-}
-
-@inproceedings{Iyer-CQOS,
- author = {Iyer, Ravi},
- title = {CQoS: A Framework for Enabling QoS in Shared Caches of CMP Platforms},
- booktitle = {Proceedings of the 18th Annual International Conference on Supercomputing},
- series = {ICS '04},
- year = {2004},
- isbn = {1-58113-839-3},
- location = {Malo, France},
- pages = {257--266},
- numpages = {10},
- url = {http://doi.acm.org/10.1145/1006209.1006246},
- doi = {10.1145/1006209.1006246},
- acmid = {1006246},
- publisher = {ACM},
- address = {New York, NY, USA},
- keywords = {CMP, QoS, cache, partitioning, performance, sharing},
-}
-
 
 @manual{Intel-IOMMU:2013,
   organization = {Intel Corporation},
@@ -1277,4 +1304,425 @@ year = {2005}
   month = {September},
   year = {2013},
   note = {Order number D51397-006}
+}
+
+@inproceedings{Skochinsky:2014,
+author = {Skochinsky, Igor},
+title = {{Intel ME Secrets}},
+booktitle = {Code Blue},
+year = {2014}
+}
+
+@inproceedings{Dornseif:2004vc,
+author = {Dornseif, Maximillian},
+title = {{0wned by an iPod}},
+booktitle = {PacSec},
+year = {2004}
+}
+
+@inproceedings{Delugre:2010vo,
+author = {Delugr{\'e}, Guillaume},
+title = {{Closer to metal: reverse-engineering the Broadcom NetExtreme's firmware}},
+booktitle = {Hack. lu},
+year = {2010},
+pages = {27--29}
+}
+
+@inproceedings{Gazet:2011tu,
+author = {Gazet, Alexandre},
+title = {{Sticky fingers {\&} KBC Custom Shop}},
+booktitle = {RECON},
+year = {2011},
+pages = {180--193},
+month = jun
+}
+
+@inproceedings{Kaczmarek:2013vi,
+author = {Kaczmarek, S{\'e}bastien},
+title = {{UEFI and Dreamboot}},
+booktitle = {Hack in the Box},
+year = {2013},
+month = jun
+}
+
+@inproceedings{e:2011vx,
+author = {e, Guillaume Delugr},
+title = {{Reverse engineering a Qualcomm baseband}},
+booktitle = {28C3},
+year = {2011},
+pages = {1--41},
+month = dec
+}
+
+@inproceedings{Duflot:2009tl,
+author = {Duflot, Lo{\"\i}c and Levillain, Olivier and Morin, Benjamin},
+title = {{ACPI: Design Principles and Concerns}},
+booktitle = {Trust '09: Proceedings of the 2nd International Conference on Trusted Computing},
+year = {2009},
+publisher = { Springer-Verlag},
+month = feb
+}
+
+@inproceedings{Embleton:2008cd,
+author = {Embleton, Shawn and Sparks, Sherri and Zou, Cliff},
+title = {{SMM rootkits: a new breed of OS independent malware}},
+booktitle = {SecureComm '08: Proceedings of the 4th international conference on Security and privacy in communication netowrks},
+year = {2008},
+publisher = { ACM},
+month = sep
+}
+
+@inproceedings{Miller:2011to,
+author = {Miller, Charlie},
+title = {{Battery firmware hacking}},
+booktitle = {Black Hat USA},
+year = {2011},
+pages = {3--4}
+}
+
+@inproceedings{Heasman:2006wg,
+author = {Heasman, John},
+title = {{Implementing and detecting a PCI rootkit}},
+booktitle = {Black Hat DC},
+year = {2006},
+pages = {3}
+}
+
+@inproceedings{Heasman:2006ta,
+author = {Heasman, John},
+title = {{Implementing and Detecting an ACPI BIOS Rootkit}},
+booktitle = {Black Hat Federal},
+year = {2006}
+}
+
+@inproceedings{Soeder:2005vh,
+author = {Soeder, Derek and Permeh, Ryan},
+title = {{eEye BootRoot}},
+booktitle = {BlackHat USA},
+year = {2005}
+}
+
+@inproceedings{Rutkowska:2006wy,
+author = {Rutkowska, Joanna},
+title = {{Subverting VistaTM kernel for fun and profit}},
+booktitle = {Black Hat Briefings},
+year = {2006}
+}
+
+@inproceedings{Heasman:2007tv,
+author = {Heasman, John},
+title = {{Hacking the Extensible Firmware Interface}},
+booktitle = {BlackHat USA},
+year = {2007},
+pages = {1--41},
+month = aug
+}
+
+@inproceedings{Chen:2009we,
+author = {Chen, K},
+title = {{Reversing and exploiting an Apple firmware update}},
+booktitle = {Black Hat USA},
+year = {2009}
+}
+
+@inproceedings{Kleissner:2009wc,
+author = {Kleissner, Peter},
+title = {{Stoned bootkit}},
+booktitle = {Black Hat USA},
+year = {2009}
+}
+
+@inproceedings{Ortega:2009uc,
+author = {Ortega, Alfredo and Sacco, Anibal},
+title = {{Deactivate the Rootkit: Attacks on BIOS anti-theft technologies}},
+booktitle = {Black Hat USA},
+year = {2009},
+publisher = {BlackHat USA}
+}
+
+@inproceedings{Blanco:2012te,
+author = {Blanco, Andr{\'e}s and Eissler, Matias},
+title = {{One firmware to monitor'em all.}},
+booktitle = {Ekoparty},
+year = {2012}
+}
+
+@inproceedings{Skochinsky:2012ty,
+author = {Skochinsky, Igor},
+title = {{Rootkit in your laptop:}},
+booktitle = {Breakpoint },
+year = {2012},
+pages = {1--51},
+month = oct
+}
+
+@inproceedings{Duflot:2006vp,
+author = {Duflot, Lo{\"\i}c and Etiemble, Daniel and Grumelard, Olivier},
+title = {{Using CPU system management mode to circumvent operating system security functions}},
+booktitle = {CanSecWest},
+year = {2006}
+}
+
+@inproceedings{Duflot:2009wu,
+author = {Duflot, Lo{\"\i}c and Levillain, Olivier and Morin, Benjamin and Grumelard, Olivier},
+title = {{Getting into the SMRAM: SMM reloaded}},
+booktitle = {CanSecWest},
+year = {2009}
+}
+
+@inproceedings{Sacco:2009vq,
+author = {Sacco, Anibal L and Ortega, Alfredo A},
+title = {{Persistent BIOS infection}},
+booktitle = {CanSecWest},
+year = {2009}
+}
+
+@techreport{Kallenberg:wv,
+author = {Kallenberg, C and Butterworth, J and Cornwell, S and Kovah, X},
+title = {{Defeating Signed BIOS Enforcement}}
+}
+
+@inproceedings{Loukas:2012wc,
+author = {Loukas, K},
+title = {{De Mysteriis Dom Jobsivs--Mac EFI Rootkits}},
+booktitle = {Black Hat USA},
+year = {2012}
+}
+
+@inproceedings{Luksenberg:2012uf,
+author = {Luksenberg, Andres Lopez and Economou, Nicolas A},
+title = {{Deep Boot}},
+booktitle = {CanSecWest},
+year = {2012},
+pages = {1--54},
+month = mar
+}
+
+@inproceedings{Brossard:2008wt,
+author = {Brossard, Jonathan},
+title = {{Bypassing pre-boot authentication passwords}},
+booktitle = {Defcon 16},
+year = {2008}
+}
+
+@inproceedings{Duflot:2011tu,
+author = {Duflot, Lo{\"\i}c and Perez, Yves-Alexis and Morin, Benjamin},
+title = {{Run-time firmware integrity verification: what if you can't trust your network card}},
+booktitle = {CanSecWest},
+year = {2011},
+pages = {9--11}
+}
+
+@inproceedings{Bulygin:2013wp,
+author = {Bulygin, Yuriy},
+title = {{Evil Maid Just Got Angrier}},
+booktitle = {CanSecWest},
+year = {2013},
+month = mar
+}
+
+@inproceedings{Rutkowska:2007wq,
+author = {Rutkowska, Joanna and Tereshkin, Alexander},
+title = {{IsGameOver () anyone}},
+booktitle = {Black Hat USA},
+year = {2007}
+}
+
+@inproceedings{Duflot:2007ux,
+author = {Duflot, Lo{\"\i}c and Absil, Laurent},
+title = {{Programmed I/O accesses: a threat to virtual Machine Monitors}},
+booktitle = {PacSec},
+year = {2007}
+}
+
+@inproceedings{Wojtczuk:2008vg,
+author = {Wojtczuk, Rafal},
+title = {{Subverting the Xen hypervisor}},
+booktitle = {Black Hat USA},
+year = {2008},
+publisher = {Citeseer}
+}
+
+@inproceedings{Rutkowska:2008vk,
+author = {Rutkowska, Joanna and Wojtczuk, Rafa{\l}},
+title = {{Preventing and detecting Xen hypervisor subversions}},
+booktitle = {Blackhat Briefings USA},
+year = {2008}
+}
+
+@inproceedings{Rutkowska:2008wo,
+author = {Rutkowska, Joanna and Tereshkin, Alexander},
+title = {{Bluepilling the xen hypervisor}},
+booktitle = {Black Hat USA},
+year = {2008}
+}
+
+@inproceedings{Chifflier:2013ux,
+author = {Chifflier, P},
+title = {{UEFI and PCI bootkits}},
+booktitle = {PacSec},
+year = {2013},
+month = jun
+}
+
+@inproceedings{Weinmann:2013vc,
+author = {Weinmann, Ralf-Philipp},
+title = {{Baseband exploitation in 2013: Hexagon challenges}},
+booktitle = {PacSec},
+year = {2013},
+pages = {1--21},
+month = nov
+}
+
+@inproceedings{Bing:2007wn,
+author = {Bing, Sun},
+title = {{BIOS Boot Hijacking and VMware Vulnerabilities Digging}},
+booktitle = {POC},
+year = {2007},
+pages = {1--26},
+month = nov
+}
+
+@inproceedings{Bulygin:2013ue,
+author = {Bulygin, Yuriy and Furtak, Andrew and Bazhaniuk, Oleksandr},
+title = {{A Tale of One Software Bypass of Windows 8 Secure Boot}},
+booktitle = {Black Hat USA},
+year = {2013}
+}
+
+@inproceedings{Butterworth:2013ul,
+author = {Butterworth, John and Kallenberg, Corey and Kovah, Xeno and Herzog, Amy},
+title = {{BIOS chronomancy: Fixing the core root of trust for measurement}},
+booktitle = {{ACM Computer and Communications Security}},
+year = {2013},
+pages = {25--36},
+publisher = {MITRE}
+}
+
+@techreport{Kovah:2014,
+author = {Kovah, Xeno and Butterworth, John and Kallenberg, Corey and Cornwell, Sam},
+title = {{Copernicus 2: SENTER the Dragon}},
+year = {2014},
+institution = {MITRE}
+}
+
+
+@inproceedings{Sevinsky:2013wy,
+author = {Sevinsky, Russ},
+title = {{Funderbolt: Adventures in Thunderbolt DMA Attacks}},
+booktitle = {Black Hat USA},
+year = {2013},
+month = aug
+}
+
+@inproceedings{Zaddach:2013vh,
+author = {Zaddach, Jonas and Costin, Andrei},
+title = {{Embedded devices security and firmware reverse engineering}},
+booktitle = {Black Hat USA Workshop},
+year = {2013},
+month = jun
+}
+
+@inproceedings{Weinma:2010vx,
+author = {Weinma, Ralf-Philipp},
+title = {{All Your Baseband Are Belong To Us}},
+booktitle = {Deepsec},
+year = {2010},
+pages = {1--45},
+month = oct
+}
+
+@inproceedings{Weinmann:2012vu,
+author = {Weinmann, Ralf-Philipp},
+title = {{Baseband Attacks: Remote Exploitation of Memory Corruptions in Cellular Protocol Stacks.}},
+booktitle = {WOOT},
+year = {2012},
+pages = {12--21}
+}
+
+@article{Applebaum:2013,
+author = {Appelbaum, Jacob and Horchert, Judith and St\"{o}cker, Christian},
+title = {{Shopping for Spy Gear: Catalog Advertises NSA Toolbox}},
+journal = {Der Spiegel},
+month = {December},
+year = {2013}
+}
+
+@inproceedings{Fitzpatrick:2014,
+author = {Fitzpatrick, Joe},
+title = {{NSA Playset: PCIe}},
+booktitle = {Defcon 22},
+year = {2014},
+month = {August}
+}
+
+@inproceedings{Ionescu:2013,
+author = {Ionescu, Alex},
+title = {{Apple SMC, The place to be definitely! (For an implant)}},
+booktitle = {Recon},
+year = {2013}
+}
+
+@inproceedings{Loucaides:2014,
+author = {Loucaides, John and Bulygin, Yuriy},
+title = {{Platform Firmware Security Assessment with CHIPSEC}},
+booktitle = {CanSecWest},
+year = {2014}
+}
+
+@inbook{Futral:2013,
+author = {William Futral and James Greene},
+title = {{Intel Trusted Execution Technology for Server Platforms: A Guide to More Secure Datacenters}},
+publisher = {ApressOpen},
+year = {2013}
+}
+
+@article{tcg:2007,
+  title={{TCG Specification Architecture Overview}},
+  author={Trusted Computing Group},
+  journal={TCG Specification Revision},
+  volume={1},
+  year={2007}
+}
+
+@article{Tereshkin:2009us,
+author = {Tereshkin, Alexander and Wojtczuk, Rafal},
+title = {{Introducing ring-3 rootkits}},
+journal = {Black Hat USA},
+year = {2009}
+}
+
+@article{Tarnovsky:2010uf,
+author = {Tarnovsky, Christopher},
+title = {{Deconstructing a `secure'processor}},
+journal = {Black Hat DC},
+year = {2010},
+volume = {2010}
+}
+
+@inproceedings{Brickell:2004,
+  title={Direct anonymous attestation},
+  author={Brickell, Ernie and Camenisch, Jan and Chen, Liqun},
+	booktitle = {{ACM Computer and Communications Security}},
+  pages={132--145},
+  year={2004},
+  organization={ACM}
+}
+
+@article{alves2004trustzone,
+  title={{TrustZone: Integrated hardware and software security}},
+  author={Alves, Tiago and Felton, Don},
+  journal={ARM White Paper},
+  volume={3},
+  number={4},
+  year={2004}
+}
+
+@inproceedings{Jakobsson:2011,
+  title={{Practical and secure software-based attestation}},
+  author={Jakobsson, Markus and Johansson, K-A},
+  booktitle={Lightweight Security \& Privacy (LightSec)},
+  pages={1--9},
+  year={2011},
+  organization={IEEE}
 }
